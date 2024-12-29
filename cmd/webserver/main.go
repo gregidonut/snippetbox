@@ -35,9 +35,9 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/{$}", home)
-	mux.HandleFunc("/snippet/view/{id}", snippetView)
-	mux.HandleFunc("/snippet/create", snippetCreate)
+	mux.HandleFunc("GET /{$}", home)
+	mux.HandleFunc("GET /snippet/view/{id}", snippetView)
+	mux.HandleFunc("GET /snippet/create", snippetCreate)
 
 	fmt.Printf("listening at %s\n", DEFAULT_PORT)
 	log.Fatal(http.ListenAndServe(DEFAULT_PORT, mux))
