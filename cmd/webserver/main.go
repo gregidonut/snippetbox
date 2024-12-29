@@ -24,8 +24,7 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	msg := fmt.Sprintf("hello from snippetView page %d\n", id)
-	w.Write([]byte(msg))
+	fmt.Fprintf(w, "hello from snippetView page %d\n", id)
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
