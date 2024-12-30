@@ -30,3 +30,8 @@ GET http://localhost:4000/static/
 
 ###
 
+GET http://localhost:4000/static/image/sword.svg
+Range: bytes=100-200
+
+###
+
