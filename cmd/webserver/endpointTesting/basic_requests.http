@@ -25,3 +25,8 @@ Content-Type: text/plain
 ulol
 
 ###
+
+GET http://localhost:4000/static/
+
+###
+

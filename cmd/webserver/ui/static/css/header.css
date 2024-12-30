@@ -1,0 +1,39 @@
+header {
+    background: #44475a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+
+    padding: 1rem;
+
+    postition: relative;
+}
+
+header h1 {
+    position: absolute;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+}
+
+header nav img {
+    padding: 0.3rem;
+    height: 3rem;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    gap: 1rem;
+}
