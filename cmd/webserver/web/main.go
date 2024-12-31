@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/handlers"
 )
@@ -24,6 +25,8 @@ func main() {
 	flag.StringVar(&cfg.staticDirPath, "sdp", cfg.staticDirPath, "HTTP port address")
 	flag.Parse()
 
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
 	mux := http.NewServeMux()
 
 	fileServer := http.FileServer(http.Dir(cfg.staticDirPath))
@@ -35,6 +38,8 @@ func main() {
 	mux.HandleFunc("POST /snippet/create", handlers.SnippetCreatePost)
 
 	port := fmt.Sprintf(":%d", cfg.port)
-	fmt.Printf("listening at %s\n", port)
-	log.Fatal(http.ListenAndServe(port, mux))
+
+	logger.Info("starting server", "port", port)
+	logger.Error(http.ListenAndServe(port, mux).Error())
+	os.Exit(1)
 }
