@@ -7,20 +7,22 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/handlers"
 )
 
-type config struct {
+type runtimeCFG struct {
 	port          int
 	staticDirPath string
 }
 
-func (c *config) getPort() string {
+func (c *runtimeCFG) getPort() string {
 	return fmt.Sprintf(":%d", c.port)
 }
 
 func main() {
-	cfg := config{
+	app := config.NewApplication()
+	cfg := runtimeCFG{
 		port:          4000,
 		staticDirPath: "./cmd/webserver/ui/static",
 	}
@@ -29,23 +31,18 @@ func main() {
 	flag.StringVar(&cfg.staticDirPath, "sdp", cfg.staticDirPath, "HTTP port address")
 	flag.Parse()
 
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		AddSource: true,
-		Level:     slog.LevelDebug,
-	}))
-
 	mux := http.NewServeMux()
 
 	fileServer := http.FileServer(http.Dir(cfg.staticDirPath))
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
 
-	mux.HandleFunc("GET /{$}", handlers.Home)
+	mux.HandleFunc("GET /{$}", handlers.Home(app))
 	mux.HandleFunc("GET /snippet/view/{id}", handlers.SnippetView)
 	mux.HandleFunc("GET /snippet/create", handlers.SnippetCreate)
 	mux.HandleFunc("POST /snippet/create", handlers.SnippetCreatePost)
 
-	logger.Info("starting server", slog.Int("port", cfg.port))
-	logger.Error(
+	app.Logger.Info("starting server", slog.Int("port", cfg.port))
+	app.Logger.Error(
 		http.ListenAndServe(cfg.getPort(), mux).Error(),
 	)
 	os.Exit(1)

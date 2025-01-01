@@ -2,40 +2,50 @@ package handlers
 
 import (
 	"html/template"
-	"log"
+	"log/slog"
 	"net/http"
+
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 )
 
-func Home(w http.ResponseWriter, r *http.Request) {
-	_ = r
-	w.Header().Add("Server", "Go")
-	w.Header().Add("Content-Type", "text/html")
+func Home(app *config.Application) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		_ = r
+		w.Header().Add("Server", "Go")
+		w.Header().Add("Content-Type", "text/html")
 
-	files := []string{
-		"./cmd/webserver/ui/html/base.tmpl.html",
-		"./cmd/webserver/ui/html/partials/nav.tmpl.html",
-		"./cmd/webserver/ui/html/pages/home.tmpl.html",
-	}
+		files := []string{
+			"./cmd/webserver/ui/html/base.tmpl.html",
+			"./cmd/webserver/ui/html/partials/nav.tmpl.html",
+			"./cmd/webserver/ui/html/pages/home.tmpl.html",
+		}
 
-	ts, err := template.ParseFiles(
-		files...,
-	)
-	if err != nil {
-
-		http.Error(
-			w,
-			"Internal Server Error",
-			http.StatusInternalServerError,
+		ts, err := template.ParseFiles(
+			files...,
 		)
-		return
-	}
+		if err != nil {
+			app.Logger.Error(err.Error(),
+				slog.String("method", r.Method),
+				slog.String("uri", r.URL.RequestURI()),
+			)
+			http.Error(
+				w,
+				"Internal Server Error",
+				http.StatusInternalServerError,
+			)
+			return
+		}
 
-	if err = ts.ExecuteTemplate(w, "base", nil); err != nil {
-		log.Print(err.Error())
-		http.Error(
-			w,
-			"Internal Server Error",
-			http.StatusInternalServerError,
-		)
+		if err = ts.ExecuteTemplate(w, "base", nil); err != nil {
+			app.Logger.Error(err.Error(),
+				slog.String("method", r.Method),
+				slog.String("uri", r.URL.RequestURI()),
+			)
+			http.Error(
+				w,
+				"Internal Server Error",
+				http.StatusInternalServerError,
+			)
+		}
 	}
 }
