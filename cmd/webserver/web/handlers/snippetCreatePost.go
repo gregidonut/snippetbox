@@ -2,7 +2,7 @@ package handlers
 
 import "net/http"
 
-func SnippetCreatePost(w http.ResponseWriter, r *http.Request) {
+func snippetCreatePost(w http.ResponseWriter, r *http.Request) {
 	_ = r
 
 	w.WriteHeader(http.StatusCreated)

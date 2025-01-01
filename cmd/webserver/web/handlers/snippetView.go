@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func SnippetView(w http.ResponseWriter, r *http.Request) {
+func snippetView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil || id <= 0 {
 		http.NotFound(w, r)

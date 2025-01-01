@@ -7,7 +7,7 @@ import (
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 )
 
-func Home(app *config.Application) http.HandlerFunc {
+func home(app *config.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		_ = r
 		w.Header().Add("Server", "Go")
