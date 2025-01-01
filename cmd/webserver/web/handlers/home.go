@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"html/template"
-	"log/slog"
 	"net/http"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
@@ -24,28 +23,12 @@ func Home(app *config.Application) http.HandlerFunc {
 			files...,
 		)
 		if err != nil {
-			app.Logger.Error(err.Error(),
-				slog.String("method", r.Method),
-				slog.String("uri", r.URL.RequestURI()),
-			)
-			http.Error(
-				w,
-				"Internal Server Error",
-				http.StatusInternalServerError,
-			)
+			app.ServerError(w, r, err)
 			return
 		}
 
 		if err = ts.ExecuteTemplate(w, "base", nil); err != nil {
-			app.Logger.Error(err.Error(),
-				slog.String("method", r.Method),
-				slog.String("uri", r.URL.RequestURI()),
-			)
-			http.Error(
-				w,
-				"Internal Server Error",
-				http.StatusInternalServerError,
-			)
+			app.ServerError(w, r, err)
 		}
 	}
 }
