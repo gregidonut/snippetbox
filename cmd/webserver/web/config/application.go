@@ -4,12 +4,14 @@ import (
 	"database/sql"
 	"log/slog"
 	"os"
+
+	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 )
 
 type Application struct {
 	*slog.Logger
 	*RuntimeCFG
-	*sql.DB
+	*models.SnippetModel
 }
 
 func NewApplication() (*Application, error) {
@@ -34,8 +36,8 @@ func NewApplication() (*Application, error) {
 	if err != nil {
 		return payload, err
 	}
-	payload.DB = db
 
+	payload.SnippetModel = models.NewSnippetModel(db)
 	return payload, nil
 }
 
@@ -55,17 +57,17 @@ func (app *Application) checkDefaultConfigPathExists() {
 	os.Exit(1)
 }
 
-func (app Application) openDB() (*sql.DB, error) {
+func (app *Application) openDB() (*sql.DB, error) {
 	app.Debug("started openDB func")
 	defer app.Debug("finished openDB func")
 
 	db, err := sql.Open("postgres", app.ConnStr)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 
 	err = db.Ping()
-	if err == nil {
+	if err != nil {
 		db.Close()
 		return nil, err
 	}
