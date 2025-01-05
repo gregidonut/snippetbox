@@ -1,68 +1,75 @@
 package config
 
 import (
-	"errors"
-	"fmt"
+	"database/sql"
 	"log/slog"
 	"os"
-
-	"gopkg.in/yaml.v3"
 )
-
-const DEFAULT_CONFIG_PATH = "./defaultConfig.yaml"
-
-type RuntimeCFG struct {
-	Port          int    `yaml:"Port"`
-	StaticDirPath string `yaml:"StaticDirPath"`
-	ConnStr       string `yaml:"ConnStr"`
-}
-
-func (c *RuntimeCFG) GetPort() string {
-	return fmt.Sprintf(":%d", c.Port)
-}
-
-func NewRuntimeCFG(configFilePath string) (*RuntimeCFG, error) {
-	if configFilePath != DEFAULT_CONFIG_PATH {
-		// TODO: implement custom config file logic
-		return &RuntimeCFG{}, errors.New("config file specified but not implemented yet")
-	}
-	yamlFile, err := os.ReadFile(configFilePath)
-	if err != nil {
-		return nil, err
-	}
-
-	payload := RuntimeCFG{}
-
-	err = yaml.Unmarshal(yamlFile, &payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return &payload, nil
-}
 
 type Application struct {
 	*slog.Logger
 	*RuntimeCFG
+	*sql.DB
 }
 
-func NewApplication() (*Application, error) {
-	// mandatoryLogger will segfault entire app if not returned with the application struct even
-	// in error situations since we rely on the error logs that won't exist from main
-	//
-	mandatoryLogger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		AddSource: true,
-		Level:     slog.LevelDebug,
-	}))
+// NewApplication must return the db.Close function to be closed by events from the
+// main func
+func NewApplication() (*Application, func() error, error) {
+	// payload needs to always be returned regardles of error since
+	// entire app depends on the existence of logger
+	payload := &Application{
+		Logger: slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			AddSource: true,
+			Level:     slog.LevelDebug,
+		})),
+	}
 
 	rcfg, err := NewRuntimeCFG(DEFAULT_CONFIG_PATH)
 	if err != nil {
-		return &Application{
-			Logger: mandatoryLogger,
-		}, err
+		return payload, nil, err
 	}
-	return &Application{
-		Logger:     mandatoryLogger,
-		RuntimeCFG: rcfg,
-	}, nil
+	payload.RuntimeCFG = rcfg
+
+	payload.checkDefaultConfigPathExists()
+	db, err := payload.openDB()
+	if err != nil {
+		return payload, nil, err
+	}
+	payload.DB = db
+
+	return payload, db.Close, nil
+}
+
+func (app *Application) checkDefaultConfigPathExists() {
+	app.Debug("checking if default config file exists...")
+	defer app.Debug("completed existence check")
+
+	_, err := os.Stat(DEFAULT_CONFIG_PATH)
+	if err == nil {
+		return
+	}
+	if os.IsNotExist(err) {
+		app.Warn("default filepath not exist make sure to specify it with -conf")
+		return
+	}
+	app.Error(err.Error())
+	os.Exit(1)
+}
+
+func (app Application) openDB() (*sql.DB, error) {
+	app.Debug("started openDB func")
+	defer app.Debug("finished openDB func")
+
+	db, err := sql.Open("postgres", app.ConnStr)
+	if err == nil {
+		return nil, err
+	}
+
+	err = db.Ping()
+	if err == nil {
+		db.Close()
+		return nil, err
+	}
+
+	return db, nil
 }
