@@ -12,9 +12,7 @@ type Application struct {
 	*sql.DB
 }
 
-// NewApplication must return the db.Close function to be closed by events from the
-// main func
-func NewApplication() (*Application, func() error, error) {
+func NewApplication() (*Application, error) {
 	// payload needs to always be returned regardles of error since
 	// entire app depends on the existence of logger
 	payload := &Application{
@@ -26,18 +24,19 @@ func NewApplication() (*Application, func() error, error) {
 
 	rcfg, err := NewRuntimeCFG(DEFAULT_CONFIG_PATH)
 	if err != nil {
-		return payload, nil, err
+		return payload, err
 	}
 	payload.RuntimeCFG = rcfg
 
 	payload.checkDefaultConfigPathExists()
+
 	db, err := payload.openDB()
 	if err != nil {
-		return payload, nil, err
+		return payload, err
 	}
 	payload.DB = db
 
-	return payload, db.Close, nil
+	return payload, nil
 }
 
 func (app *Application) checkDefaultConfigPathExists() {

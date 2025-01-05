@@ -13,12 +13,12 @@ import (
 )
 
 func main() {
-	app, closeDB, err := config.NewApplication()
+	app, err := config.NewApplication()
 	if err != nil {
 		app.Error(err.Error(), slog.String("constructor", "config.NewApplication()"))
 		os.Exit(1)
 	}
-	defer closeDB()
+	defer app.Close()
 
 	configFilePath := flag.String("conf", config.DEFAULT_CONFIG_PATH, "specify a config file path")
 	flag.IntVar(&app.Port, "p", app.Port, "HTTP port address")
