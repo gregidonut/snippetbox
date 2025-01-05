@@ -14,7 +14,7 @@ func (app *Application) ServerError(
 		method = r.Method
 		uri    = r.URL.RequestURI()
 	)
-	app.Logger.Error(err.Error(),
+	app.Error(err.Error(),
 		slog.String("method", method),
 		slog.String("uri", uri),
 	)
