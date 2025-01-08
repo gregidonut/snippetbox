@@ -20,7 +20,3 @@ type SnippetModel struct {
 func NewSnippetModel(db *sql.DB) *SnippetModel {
 	return &SnippetModel{DB: db}
 }
-
-func (m *SnippetModel) Latest() ([]Snippet, error) {
-	return nil, nil
-}
