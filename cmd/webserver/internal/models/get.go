@@ -23,7 +23,7 @@ WHERE expires > now() AND id=$1`
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return Snippet{}, errors.Join(ErrNoRecord, fmt.Errorf("from %d id", id))
+			return Snippet{}, fmt.Errorf("%w on id: %d", ErrNoRecord, id)
 		}
 		return Snippet{}, err
 	}

@@ -2,4 +2,4 @@ package models
 
 import "errors"
 
-var ErrNoRecord = errors.New("cannot find snippet")
+var ErrNoRecord = errors.New("models: cannot find snippet")
