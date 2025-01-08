@@ -73,17 +73,17 @@ a:focus {
     outline: thin dotted;
 }
 
-code {
-    padding: 0 0.5rem;
-    background: #44475a;
-}
 
 pre {
-    padding: 2rem;
-    border: #44475a solid 0.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     width: 100%;
-    overflow-x: auto;
+    /* overflow-x: auto; */
+    white-space: pre-wrap; 
+    overflow-wrap: break-word;
 }
 
 ul,

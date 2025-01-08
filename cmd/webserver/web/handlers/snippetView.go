@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -30,14 +30,24 @@ func snippetView(app *config.Application) http.HandlerFunc {
 			app.ServerError(w, r, err)
 			return
 		}
+		files := []string{
+			"./cmd/webserver/ui/html/base.tmpl.html",
+			"./cmd/webserver/ui/html/partials/nav.tmpl.html",
+			"./cmd/webserver/ui/html/pages/view.tmpl.html",
+		}
 
-		b, err := json.MarshalIndent(snippet, "", "    ")
+		ts, err := template.ParseFiles(
+			files...,
+		)
 		if err != nil {
 			app.ServerError(w, r, err)
 			return
 		}
+		app.Debug("parsed tmpl files")
 
-		w.Header().Add("Content-Type", "application/json")
-		w.Write(b)
+		w.Header().Add("Content-Type", "text/html")
+		if err = ts.ExecuteTemplate(w, "base", snippet); err != nil {
+			app.ServerError(w, r, err)
+		}
 	}
 }

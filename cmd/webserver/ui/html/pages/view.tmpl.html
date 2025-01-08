@@ -1,0 +1,23 @@
+{{define "title"}}Snippet #{{.ID}}{{end}}
+{{define "main"}}
+<link rel="stylesheet"  href="/static/css/snippetArticle.css">
+<article class="snippet-article">
+    <header>
+        <h2>{{.Title}}</h2>&nbsp;
+        <span>#{{.ID}}</span>
+    </header>
+    <main>
+    <pre><code>
+        {{.Content}}
+    </code></pre>
+    </main>
+    <footer>
+        <p>
+            Created: <time datetime="{{.Created}}">{{.Created}}</time>
+        </p>
+        <p>
+            Expires: <time datetime="{{.Expires}}">{{.Expires}}</time>
+        </p>
+    </footer>
+</article>
+{{end}}
