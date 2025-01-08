@@ -21,6 +21,8 @@ WHERE expires > now() AND id=$1`
 		&payload.Created,
 		&payload.Expires,
 	)
+
+	payload.Created.Local().Weekday()
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return Snippet{}, fmt.Errorf("%w on id: %d", ErrNoRecord, id)
