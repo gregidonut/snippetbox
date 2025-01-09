@@ -13,10 +13,10 @@
     </main>
     <footer>
         <p>
-            Created: <time datetime="{{.Created}}">{{.Created.Local.Weekday}}</time>
+            Created: <time datetime="{{.Created}}">{{.Created.Local.Format "Jan 2, 2006 -07MST" }}</time>
         </p>
         <p>
-            Expires: <time datetime="{{.Expires}}">{{.Expires}}</time>
+            Expires: <time datetime="{{.Expires}}">{{.Expires.Local.Format "Jan 2, 2006 -07MST" }}</time>
         </p>
     </footer>
 </article>
