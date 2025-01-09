@@ -3,20 +3,20 @@
 <link rel="stylesheet"  href="/static/css/snippetArticle.css">
 <article class="snippet-article">
     <header>
-        <h2>{{.Title}}</h2>&nbsp;
-        <span>#{{.ID}}</span>
+        <h2>{{.Snippet.Title}}</h2>&nbsp;
+        <span>#{{.Snippet.ID}}</span>
     </header>
     <main>
     <pre><code>
-        {{.Content}}
+        {{.Snippet.Content}}
     </code></pre>
     </main>
     <footer>
         <p>
-            Created: <time datetime="{{.Created}}">{{.Created.Local.Format "Jan 2, 2006 -07MST" }}</time>
+            Created: <time datetime="{{.Snippet.Created}}">{{.Snippet.Created.Local.Format "Jan 2, 2006 -07MST" }}</time>
         </p>
         <p>
-            Expires: <time datetime="{{.Expires}}">{{.Expires.Local.Format "Jan 2, 2006 -07MST" }}</time>
+            Expires: <time datetime="{{.Snippet.Expires}}">{{.Snippet.Expires.Local.Format "Jan 2, 2006 -07MST" }}</time>
         </p>
     </footer>
 </article>

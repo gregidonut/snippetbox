@@ -3,8 +3,14 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 )
+
+type templateData struct {
+	models.Snippet
+	snippets []models.Snippet
+}
 
 func Routes(app *config.Application) *http.ServeMux {
 	mux := http.NewServeMux()

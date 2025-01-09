@@ -45,8 +45,10 @@ func snippetView(app *config.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
+		data := templateData{Snippet: snippet}
+
 		w.Header().Add("Content-Type", "text/html")
-		if err = ts.ExecuteTemplate(w, "base", snippet); err != nil {
+		if err = ts.ExecuteTemplate(w, "base", data); err != nil {
 			app.ServerError(w, r, err)
 		}
 	}
