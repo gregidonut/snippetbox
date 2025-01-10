@@ -9,7 +9,7 @@ import (
 
 type templateData struct {
 	models.Snippet
-	snippets []models.Snippet
+	Snippets []models.Snippet
 }
 
 func Routes(app *config.Application) *http.ServeMux {

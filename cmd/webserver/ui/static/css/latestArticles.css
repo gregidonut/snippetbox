@@ -1,0 +1,21 @@
+.snippets-table {
+    width: 100%;
+}
+
+@media screen and (min-width: 40rem) {
+    .snippets-table {
+        width: 50rem;
+    }
+}
+
+@media screen and (min-width: 80rem) {
+    .snippets-table {
+        width: 70rem;
+    }
+}
+
+
+
+.snippets-table tr:nth-child(1){
+    background: #44475a;
+}
