@@ -1,12 +1,10 @@
-package config
+package appconfig
 
 import (
 	"bytes"
 	"fmt"
 	"log/slog"
 	"net/http"
-
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
 
 func (app *Application) ServerError(
@@ -40,7 +38,7 @@ func (app *Application) ClientError(
 	)
 }
 
-func (app *Application) Render(w http.ResponseWriter, r *http.Request, status int, page string, data templatedata.TemplateData) {
+func (app *Application) Render(w http.ResponseWriter, r *http.Request, status int, page string, data TemplateData) {
 	app.Debug(fmt.Sprintf("running render for %s", page))
 	defer app.Debug(fmt.Sprintf("finished running render for %s", page))
 

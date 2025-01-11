@@ -1,4 +1,4 @@
-package config
+package appconfig
 
 import (
 	"database/sql"
@@ -52,7 +52,7 @@ func NewApplication() (*Application, error) {
 }
 
 func (app *Application) checkDefaultConfigPathExists() {
-	app.Debug("checking if default config file exists...")
+	app.Debug("checking if default appconfig file exists...")
 	defer app.Debug("completed existence check")
 
 	_, err := os.Stat(DEFAULT_CONFIG_PATH)

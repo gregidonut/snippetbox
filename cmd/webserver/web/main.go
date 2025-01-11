@@ -6,29 +6,29 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/handlers"
 )
 
 func main() {
-	app, err := config.NewApplication()
+	app, err := appconfig.NewApplication()
 	if err != nil {
-		app.Error(err.Error(), slog.String("constructor", "config.NewApplication()"))
+		app.Error(err.Error(), slog.String("constructor", "appconfig.NewApplication()"))
 		os.Exit(1)
 	}
 	defer app.Close()
 
-	configFilePath := flag.String("conf", config.DEFAULT_CONFIG_PATH, "specify a config file path")
+	appconfigFilePath := flag.String("conf", appconfig.DEFAULT_CONFIG_PATH, "specify a appconfig file path")
 	flag.IntVar(&app.Port, "p", app.Port, "HTTP port address")
 	flag.StringVar(&app.StaticDirPath, "sdp", app.StaticDirPath, "static directory path")
 	flag.StringVar(&app.ConnStr, "cs", app.ConnStr, "postgresql connection string")
 	flag.StringVar(&app.HtmlTemplateDirPath, "htdp", app.HtmlTemplateDirPath, "dir path for the html templates")
 	flag.Parse()
 
-	if *configFilePath != config.DEFAULT_CONFIG_PATH {
-		rcfg, err := config.NewRuntimeCFG(app, *configFilePath)
+	if *appconfigFilePath != appconfig.DEFAULT_CONFIG_PATH {
+		rcfg, err := appconfig.NewRuntimeCFG(app, *appconfigFilePath)
 		if err != nil {
-			app.Error(err.Error(), slog.String("constructor", "config.NewRuntimeCFG()"))
+			app.Error(err.Error(), slog.String("constructor", "appconfig.NewRuntimeCFG()"))
 			os.Exit(1)
 		}
 		app.RuntimeCFG = rcfg

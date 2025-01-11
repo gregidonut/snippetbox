@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
 )
 
-func snippetCreatePost(app *config.Application) http.HandlerFunc {
+func snippetCreatePost(app *appconfig.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Debug("called snippetCreate handler")
 		defer app.Debug("finished snippetCreate handler")

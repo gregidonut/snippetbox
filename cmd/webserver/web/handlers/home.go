@@ -3,11 +3,10 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
 )
 
-func home(app *config.Application) http.HandlerFunc {
+func home(app *appconfig.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Info("ran home handler")
 		defer app.Info("finished running home handler")
@@ -19,7 +18,7 @@ func home(app *config.Application) http.HandlerFunc {
 
 		w.Header().Add("Server", "Go")
 		w.Header().Add("Content-Type", "text/html")
-		data := templatedata.TemplateData{
+		data := appconfig.TemplateData{
 			Snippets: snippets,
 		}
 

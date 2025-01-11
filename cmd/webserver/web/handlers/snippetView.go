@@ -7,11 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
 )
 
-func snippetView(app *config.Application) http.HandlerFunc {
+func snippetView(app *appconfig.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Info("called snippetView")
 		defer app.Info("completed snippetView handler logic")
@@ -32,7 +31,7 @@ func snippetView(app *config.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
-		data := templatedata.TemplateData{Snippet: snippet}
+		data := appconfig.TemplateData{Snippet: snippet}
 
 		w.Header().Add("Content-Type", "text/html")
 		app.Render(w, r, http.StatusOK, "view", data)
