@@ -2,16 +2,20 @@ package config
 
 import (
 	"database/sql"
+	"html/template"
 	"log/slog"
 	"os"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
+
+	_ "github.com/lib/pq"
 )
 
 type Application struct {
 	*slog.Logger
 	*RuntimeCFG
 	*models.SnippetModel
+	TemplateCache map[string]*template.Template
 }
 
 func NewApplication() (*Application, error) {
@@ -38,6 +42,12 @@ func NewApplication() (*Application, error) {
 	}
 
 	payload.SnippetModel = models.NewSnippetModel(db)
+
+	tc, err := payload.NewTemplateCache()
+	if err != nil {
+		return payload, err
+	}
+	payload.TemplateCache = tc
 	return payload, nil
 }
 

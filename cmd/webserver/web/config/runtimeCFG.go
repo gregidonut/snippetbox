@@ -11,9 +11,10 @@ import (
 const DEFAULT_CONFIG_PATH = "./defaultConfig.yaml"
 
 type RuntimeCFG struct {
-	Port          int    `yaml:"Port"`
-	StaticDirPath string `yaml:"StaticDirPath"`
-	ConnStr       string `yaml:"ConnStr"`
+	Port                      int    `yaml:"Port"`
+	StaticDirPath             string `yaml:"StaticDirPath"`
+	ConnStr                   string `yaml:"ConnStr"`
+	HtmlPagesTemplatePathGlob string `yaml:"HtmlPagesTemplatePathGlob"`
 }
 
 func (c *RuntimeCFG) GetPort() string {
