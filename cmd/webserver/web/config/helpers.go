@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -55,9 +56,14 @@ func (app *Application) Render(w http.ResponseWriter, r *http.Request, status in
 		return
 	}
 
+	buf := new(bytes.Buffer)
+
+	if err := ts.ExecuteTemplate(buf, "base", data); err != nil {
+		app.ServerError(w, r, err)
+		return
+	}
+
 	w.WriteHeader(status)
 
-	if err := ts.ExecuteTemplate(w, "base", data); err != nil {
-		app.ServerError(w, r, err)
-	}
+	buf.WriteTo(w)
 }
