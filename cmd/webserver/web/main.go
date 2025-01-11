@@ -26,7 +26,7 @@ func main() {
 	flag.Parse()
 
 	if *configFilePath != config.DEFAULT_CONFIG_PATH {
-		rcfg, err := config.NewRuntimeCFG(*configFilePath)
+		rcfg, err := config.NewRuntimeCFG(app, *configFilePath)
 		if err != nil {
 			app.Error(err.Error(), slog.String("constructor", "config.NewRuntimeCFG()"))
 			os.Exit(1)

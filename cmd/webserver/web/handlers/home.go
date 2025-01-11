@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
 
 func home(app *config.Application) http.HandlerFunc {
@@ -19,27 +19,10 @@ func home(app *config.Application) http.HandlerFunc {
 
 		w.Header().Add("Server", "Go")
 		w.Header().Add("Content-Type", "text/html")
-
-		files := []string{
-			"./cmd/webserver/ui/html/base.tmpl.html",
-			"./cmd/webserver/ui/html/partials/nav.tmpl.html",
-			"./cmd/webserver/ui/html/pages/home.tmpl.html",
-		}
-
-		data := templateData{
+		data := templatedata.TemplateData{
 			Snippets: snippets,
 		}
 
-		ts, err := template.ParseFiles(
-			files...,
-		)
-		if err != nil {
-			app.ServerError(w, r, err)
-			return
-		}
-
-		if err = ts.ExecuteTemplate(w, "base", data); err != nil {
-			app.ServerError(w, r, err)
-		}
+		app.Render(w, r, http.StatusOK, "home", data)
 	}
 }

@@ -28,7 +28,7 @@ func NewApplication() (*Application, error) {
 		})),
 	}
 
-	rcfg, err := NewRuntimeCFG(DEFAULT_CONFIG_PATH)
+	rcfg, err := NewRuntimeCFG(payload, DEFAULT_CONFIG_PATH)
 	if err != nil {
 		return payload, err
 	}

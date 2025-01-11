@@ -3,7 +3,9 @@ package config
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"os"
+	"reflect"
 
 	"gopkg.in/yaml.v3"
 )
@@ -21,7 +23,9 @@ func (c *RuntimeCFG) GetPort() string {
 	return fmt.Sprintf(":%d", c.Port)
 }
 
-func NewRuntimeCFG(configFilePath string) (*RuntimeCFG, error) {
+func NewRuntimeCFG(app *Application, configFilePath string) (*RuntimeCFG, error) {
+	app.Debug("creating configuration", slog.String("constructor", "NewRuntimeCFG"))
+	defer app.Debug("finished creating configuration", slog.String("constructor", "NewRuntimeCFG"))
 	if configFilePath != DEFAULT_CONFIG_PATH {
 		// TODO: implement custom config file logic
 		return &RuntimeCFG{}, errors.New("config file specified but not implemented yet")
@@ -38,5 +42,26 @@ func NewRuntimeCFG(configFilePath string) (*RuntimeCFG, error) {
 		return nil, err
 	}
 
+	app.Info(fmt.Sprintf("current config %#v", payload))
+
+	if err = validate(payload); err != nil {
+		return nil, err
+	}
+
 	return &payload, nil
+}
+
+// validateStruct checks for zero values in the struct and returns an error with the field name
+func validate(s interface{}) error {
+	v := reflect.ValueOf(s)
+	t := v.Type()
+
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if field.IsZero() {
+			fieldName := t.Field(i).Name
+			return fmt.Errorf("field '%s' has a zero value", fieldName)
+		}
+	}
+	return nil
 }
