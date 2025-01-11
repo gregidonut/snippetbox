@@ -31,12 +31,21 @@ func (app *Application) NewTemplateCache() (map[string]*template.Template, error
 			name      = strings.TrimSuffix(tmplFName, filepath.Ext(tmplFName))
 		)
 
-		files := []string{
+		ts, err := template.ParseFiles(
 			filepath.Join(app.HtmlTemplateDirPath, "base.tmpl.html"),
-			filepath.Join(app.HtmlTemplateDirPath, "partials/nav.tmpl.html"),
-			page,
+		)
+		if err != nil {
+			return nil, err
 		}
-		ts, err := template.ParseFiles(files...)
+
+		ts, err = ts.ParseGlob(
+			filepath.Join(app.HtmlTemplateDirPath, "partials/*.tmpl.html"),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		ts, err = ts.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
