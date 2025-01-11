@@ -16,12 +16,11 @@ func home(app *appconfig.Application) http.HandlerFunc {
 			return
 		}
 
+		data := app.NewTemplateData(r)
+		data.Snippets = snippets
+
 		w.Header().Add("Server", "Go")
 		w.Header().Add("Content-Type", "text/html")
-		data := appconfig.TemplateData{
-			Snippets: snippets,
-		}
-
 		app.Render(w, r, http.StatusOK, "home", data)
 	}
 }

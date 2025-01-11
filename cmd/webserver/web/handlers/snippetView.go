@@ -31,7 +31,8 @@ func snippetView(app *appconfig.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
-		data := appconfig.TemplateData{Snippet: snippet}
+		data := app.NewTemplateData(r)
+		data.Snippet = snippet
 
 		w.Header().Add("Content-Type", "text/html")
 		app.Render(w, r, http.StatusOK, "view", data)
