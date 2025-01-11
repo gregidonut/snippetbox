@@ -13,12 +13,12 @@ func (app *Application) NewTemplateCache() (map[string]*template.Template, error
 	defer app.Debug("finished creating template cache", slog.String("constructor", "NewTemplateCache"))
 
 	payload := map[string]*template.Template{}
-
+	htmlPagesTemplatePathGlob := filepath.Join(app.HtmlTemplateDirPath, "pages/*.tmpl.html")
 	app.Debug(
-		fmt.Sprintf("HtmlPagesTemplatePathGlob: %s", app.HtmlPagesTemplatePathGlob),
+		fmt.Sprintf("HtmlPagesTemplatePathGlob: %s", htmlPagesTemplatePathGlob),
 		slog.String("constructor", "NewTemplateCache"),
 	)
-	pages, err := filepath.Glob(app.HtmlPagesTemplatePathGlob)
+	pages, err := filepath.Glob(htmlPagesTemplatePathGlob)
 	if err != nil {
 		return nil, err
 	}
@@ -32,8 +32,8 @@ func (app *Application) NewTemplateCache() (map[string]*template.Template, error
 		)
 
 		files := []string{
-			"./cmd/webserver/ui/html/base.tmpl.html",
-			"./cmd/webserver/ui/html/partials/nav.tmpl.html",
+			filepath.Join(app.HtmlTemplateDirPath, "base.tmpl.html"),
+			filepath.Join(app.HtmlTemplateDirPath, "partials/nav.tmpl.html"),
 			page,
 		}
 		ts, err := template.ParseFiles(files...)

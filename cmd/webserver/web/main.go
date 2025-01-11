@@ -22,7 +22,7 @@ func main() {
 	flag.IntVar(&app.Port, "p", app.Port, "HTTP port address")
 	flag.StringVar(&app.StaticDirPath, "sdp", app.StaticDirPath, "static directory path")
 	flag.StringVar(&app.ConnStr, "cs", app.ConnStr, "postgresql connection string")
-	flag.StringVar(&app.HtmlPagesTemplatePathGlob, "htp", app.HtmlPagesTemplatePathGlob, "pattern to match glob for templates should prob be *.tmpl.html")
+	flag.StringVar(&app.HtmlTemplateDirPath, "htdp", app.HtmlTemplateDirPath, "dir path for the html templates")
 	flag.Parse()
 
 	if *configFilePath != config.DEFAULT_CONFIG_PATH {
