@@ -19,7 +19,6 @@ func home(app *appconfig.Application) http.HandlerFunc {
 		data := app.NewTemplateData(r)
 		data.Snippets = snippets
 
-		w.Header().Add("Server", "Go")
 		app.Render(w, r, http.StatusOK, "home", data)
 	}
 }

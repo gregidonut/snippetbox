@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/middleware"
 )
 
-func Routes(app *appconfig.Application) *http.ServeMux {
+func Routes(app *appconfig.Application) http.Handler {
 	mux := http.NewServeMux()
 
 	fileServer := http.FileServer(http.Dir(app.StaticDirPath))
@@ -17,5 +18,5 @@ func Routes(app *appconfig.Application) *http.ServeMux {
 	mux.HandleFunc("GET /snippet/create", snippetCreate)
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost(app))
 
-	return mux
+	return middleware.CommonHeaders(mux)
 }
