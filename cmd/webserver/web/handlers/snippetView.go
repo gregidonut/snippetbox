@@ -34,7 +34,6 @@ func snippetView(app *appconfig.Application) http.HandlerFunc {
 		data := app.NewTemplateData(r)
 		data.Snippet = snippet
 
-		w.Header().Add("Content-Type", "text/html")
 		app.Render(w, r, http.StatusOK, "view", data)
 	}
 }

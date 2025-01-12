@@ -20,7 +20,6 @@ func home(app *appconfig.Application) http.HandlerFunc {
 		data.Snippets = snippets
 
 		w.Header().Add("Server", "Go")
-		w.Header().Add("Content-Type", "text/html")
 		app.Render(w, r, http.StatusOK, "home", data)
 	}
 }
