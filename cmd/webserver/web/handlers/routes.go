@@ -20,6 +20,7 @@ func Routes(app *appconfig.Application) http.Handler {
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost(app))
 
 	standard := alice.New(
+		middleware.LogRequest(app),
 		middleware.CommonHeaders,
 	)
 	return standard.Then(mux)
