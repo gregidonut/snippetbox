@@ -5,6 +5,7 @@ import (
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/middleware"
+	"github.com/justinas/alice"
 )
 
 func Routes(app *appconfig.Application) http.Handler {
@@ -18,5 +19,8 @@ func Routes(app *appconfig.Application) http.Handler {
 	mux.HandleFunc("GET /snippet/create", snippetCreate)
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost(app))
 
-	return middleware.CommonHeaders(mux)
+	standard := alice.New(
+		middleware.CommonHeaders,
+	)
+	return standard.Then(mux)
 }
