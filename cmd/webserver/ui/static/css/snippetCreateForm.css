@@ -1,0 +1,28 @@
+.snippet-create-form {
+}
+
+.snippet-create-form fieldset {
+    padding: 2rem;
+}
+
+.snippet-create-form > fieldset > div {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+}
+
+.snippet-create-form > fieldset > div > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.snippet-create-form > fieldset > button {
+    padding: .5rem;
+}

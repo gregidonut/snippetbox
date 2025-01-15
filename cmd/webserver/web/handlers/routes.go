@@ -16,7 +16,7 @@ func Routes(app *appconfig.Application) http.Handler {
 
 	mux.HandleFunc("GET /{$}", home(app))
 	mux.HandleFunc("GET /snippet/view/{id}", snippetView(app))
-	mux.HandleFunc("GET /snippet/create", snippetCreate)
+	mux.HandleFunc("GET /snippet/create", snippetCreate(app))
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost(app))
 
 	standard := alice.New(
