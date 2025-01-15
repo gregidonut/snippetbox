@@ -4,10 +4,10 @@ const navList = document.querySelectorAll("nav > ul > li")
 navList.forEach(function (e) {
     if (curPathName === e.querySelector("a").getAttribute("href")) {
         const text = e.querySelector("a").innerText
-        const strongEl = document.createElement("strong")
-        strongEl.innerText = text
+        const strongLi = document.createElement("li")
+        strongLi.innerHTML = `<strong>${text}</strong>`
 
-        e.replaceWith(strongEl)
+        e.replaceWith(strongLi)
     }
 })
 
