@@ -4,10 +4,11 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appinterface"
 	"github.com/justinas/alice"
 )
 
-func LogRequest(app App) alice.Constructor {
+func LogRequest(app appinterface.App) alice.Constructor {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			app.Info("received request",
