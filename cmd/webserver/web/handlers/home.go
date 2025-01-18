@@ -3,10 +3,10 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 )
 
-func home(app *appconfig.Application) http.HandlerFunc {
+func home(app *application.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Info("ran home handler")
 		defer app.Info("finished running home handler")

@@ -1,4 +1,4 @@
-package appconfig
+package config
 
 import (
 	"errors"
@@ -7,6 +7,7 @@ import (
 	"os"
 	"reflect"
 
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/appinterface"
 	"gopkg.in/yaml.v3"
 )
 
@@ -23,14 +24,14 @@ func (c *RuntimeCFG) GetPort() string {
 	return fmt.Sprintf(":%d", c.Port)
 }
 
-func NewRuntimeCFG(app *Application, appconfigFilePath string) (*RuntimeCFG, error) {
-	app.Debug("creating appconfiguration", slog.String("constructor", "NewRuntimeCFG"))
-	defer app.Debug("finished creating appconfiguration", slog.String("constructor", "NewRuntimeCFG"))
-	if appconfigFilePath != DEFAULT_CONFIG_PATH {
-		// TODO: implement custom appconfig file logic
-		return &RuntimeCFG{}, errors.New("appconfig file specified but not implemented yet")
+func NewRuntimeCFG(app appinterface.App, applicationFilePath string) (*RuntimeCFG, error) {
+	app.Debug("creating applicationuration", slog.String("constructor", "NewRuntimeCFG"))
+	defer app.Debug("finished creating applicationuration", slog.String("constructor", "NewRuntimeCFG"))
+	if applicationFilePath != DEFAULT_CONFIG_PATH {
+		// TODO: implement custom application file logic
+		return &RuntimeCFG{}, errors.New("application file specified but not implemented yet")
 	}
-	yamlFile, err := os.ReadFile(appconfigFilePath)
+	yamlFile, err := os.ReadFile(applicationFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func NewRuntimeCFG(app *Application, appconfigFilePath string) (*RuntimeCFG, err
 		return nil, err
 	}
 
-	app.Info(fmt.Sprintf("current appconfig %#v", payload))
+	app.Info(fmt.Sprintf("current application %#v", payload))
 
 	if err = validate(payload); err != nil {
 		return nil, err

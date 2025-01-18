@@ -3,12 +3,12 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/middleware"
 	"github.com/justinas/alice"
 )
 
-func Routes(app *appconfig.Application) http.Handler {
+func Routes(app *application.Application) http.Handler {
 	mux := http.NewServeMux()
 
 	fileServer := http.FileServer(http.Dir(app.StaticDirPath))

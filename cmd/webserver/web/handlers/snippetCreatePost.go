@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 )
 
-func snippetCreatePost(app *appconfig.Application) http.HandlerFunc {
+func snippetCreatePost(app *application.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Debug("called snippetCreate handler")
 		defer app.Debug("finished snippetCreate handler")

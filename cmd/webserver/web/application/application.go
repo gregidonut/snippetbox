@@ -1,4 +1,4 @@
-package appconfig
+package application
 
 import (
 	"database/sql"
@@ -7,13 +7,14 @@ import (
 	"os"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 
 	_ "github.com/lib/pq"
 )
 
 type Application struct {
 	*slog.Logger
-	*RuntimeCFG
+	*config.RuntimeCFG
 	*models.SnippetModel
 	TemplateCache map[string]*template.Template
 }
@@ -28,7 +29,7 @@ func NewApplication() (*Application, error) {
 		})),
 	}
 
-	rcfg, err := NewRuntimeCFG(payload, DEFAULT_CONFIG_PATH)
+	rcfg, err := config.NewRuntimeCFG(payload, config.DEFAULT_CONFIG_PATH)
 	if err != nil {
 		return payload, err
 	}
@@ -52,10 +53,10 @@ func NewApplication() (*Application, error) {
 }
 
 func (app *Application) checkDefaultConfigPathExists() {
-	app.Debug("checking if default appconfig file exists...")
+	app.Debug("checking if default application file exists...")
 	defer app.Debug("completed existence check")
 
-	_, err := os.Stat(DEFAULT_CONFIG_PATH)
+	_, err := os.Stat(config.DEFAULT_CONFIG_PATH)
 	if err == nil {
 		return
 	}

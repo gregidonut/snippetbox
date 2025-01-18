@@ -7,10 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
-	"github.com/gregidonut/snippetbox/cmd/webserver/web/appconfig"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 )
 
-func snippetView(app *appconfig.Application) http.HandlerFunc {
+func snippetView(app *application.Application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		app.Info("called snippetView")
 		defer app.Info("completed snippetView handler logic")
