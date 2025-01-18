@@ -12,7 +12,7 @@ type TemplateData struct {
 	models.Snippet
 	Snippets    []models.Snippet
 	CurrentYear int
-	templatedata.SnippetCreateForm
+	templatedata.SnippetCreateFormData
 }
 
 func (app *Application) NewTemplateData(r *http.Request) TemplateData {

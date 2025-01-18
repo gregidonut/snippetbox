@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
 
 func snippetCreatePost(app *application.Application) http.HandlerFunc {
@@ -17,22 +18,28 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 			app.ClientError(w, http.StatusBadRequest)
 			return
 		}
+		app.Debug(fmt.Sprintf("r.PostForm: %#v", r.PostForm))
 
-		title := r.PostForm.Get("title")
-		content := r.PostForm.Get("content")
 		expires, err := strconv.Atoi(r.PostForm.Get("expires"))
-		if title == "" || content == "" || err != nil {
+		if err != nil {
 			app.ClientError(w, http.StatusBadRequest)
 			return
 		}
 
-		app.Debug(fmt.Sprintf("r.PostForm: %#v", r.PostForm))
-
-		id, err := app.Insert(
-			title,
-			content,
+		form := templatedata.NewSnippetCreateFormData(
+			r.PostForm.Get("title"),
+			r.PostForm.Get("content"),
 			expires,
 		)
+
+		if len(form.FieldErrors) > 0 {
+			data := app.NewTemplateData(r)
+			data.SnippetCreateFormData = *form
+			app.Render(w, r, http.StatusUnprocessableEntity, "create", data)
+			return
+		}
+
+		id, err := app.Insert(*form)
 		if err != nil {
 			app.ServerError(w, r, err)
 			return

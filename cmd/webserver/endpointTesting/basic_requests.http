@@ -20,10 +20,9 @@ ulol
 ###
 
 POST http://localhost:4000/snippet/create
-Follow-Redirects: true
-Content-Type: text/plain
+Content-Type: application/x-www-form-urlencoded
 
-ulol
+expires=7
 
 ###
 
@@ -35,4 +34,5 @@ GET http://localhost:4000/static/image/sword.svg
 Range: bytes=100-200
 
 ###
+
 
