@@ -13,20 +13,15 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 		app.Debug("called snippetCreate handler")
 		defer app.Debug("finished snippetCreate handler")
 
-		if err := r.ParseForm(); err != nil {
-			app.ClientError(w, http.StatusBadRequest)
-			return
-		}
-		app.Debug(fmt.Sprintf("r.PostForm: %#v", r.PostForm))
-
 		form := templatedata.SnippetCreateFormData{}
 
-		if err := app.Decode(&form, r.PostForm); err != nil {
+		if err := app.DecodePostForm(r, &form); err != nil {
+			app.Error(err.Error())
 			app.ClientError(w, http.StatusBadRequest)
 			return
 		}
-		form.Validate()
 
+		form.Validate()
 		if !form.Valid() {
 			data := app.NewTemplateData(r)
 			data.SnippetCreateFormData = form
