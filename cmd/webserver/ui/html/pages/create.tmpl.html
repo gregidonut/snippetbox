@@ -7,14 +7,14 @@
         <legend>create</legend>
         <div>
             <label for="title">Title</label>  
-            <input type="text" name="title" value="">
+            <input type="text" name="title" value="{{.SnippetCreateFormData.Title}}">
         </div>
         {{with .SnippetCreateFormData.FieldErrors.title}}
             <label class="error" for="title">{{.}}</label>  
         {{end}}
         <div>
             <label for="content">Content</label>  
-            <textarea name="content" cols="30" rows="4"></textarea>
+            <textarea name="content" cols="30" rows="4">{{.SnippetCreateFormData.Content}}</textarea>
         </div>
         {{with .SnippetCreateFormData.FieldErrors.content}}
             <label class="error" for="content">{{.}}</label>  
@@ -22,9 +22,15 @@
         <div>
             <label for="expires">Delete in</label>  
             <div>
+            {{with .SnippetCreateFormData.Expires}}
+                <input type="radio" name="expires" value="365" {{if eq . 365}}checked{{end}}> One Year
+                <input type="radio" name="expires" value="7" {{if eq . 7}}checked{{end}}> One Week
+                <input type="radio" name="expires" value="1" {{if eq . 1}}checked{{end}}> One Day
+            {{else}}
                 <input type="radio" name="expires" value="365"> One Year
                 <input type="radio" name="expires" value="7"> One Week
                 <input type="radio" name="expires" value="1" checked> One Day
+            {{end}}
             </div>
         </div>
         {{with .SnippetCreateFormData.FieldErrors.expires}}
