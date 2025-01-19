@@ -1,37 +1,35 @@
 package templatedata
 
 import (
-	"strings"
-	"unicode/utf8"
+	"github.com/gregidonut/snippetbox/cmd/webserver/internal/validator"
 )
 
 type SnippetCreateFormData struct {
-	Title       string
-	Content     string
-	Expires     int
-	FieldErrors map[string]string
+	Title   string
+	Content string
+	Expires int
+	validator.Validator
 }
 
-func NewSnippetCreateFormData(title, content string, expires int) *SnippetCreateFormData {
+func NewSnippetCreateFormData(title, content string, expires int) SnippetCreateFormData {
 	form := SnippetCreateFormData{
-		Title:       title,
-		Content:     content,
-		Expires:     expires,
-		FieldErrors: map[string]string{},
+		Title:   title,
+		Content: content,
+		Expires: expires,
 	}
-	if strings.TrimSpace(form.Title) == "" {
-		form.FieldErrors["title"] = "This field cannot be blank"
-	} else if utf8.RuneCountInString(form.Title) > 100 {
-		form.FieldErrors["title"] = "this field cannot be more than 100 chars long"
-	}
-
-	if strings.TrimSpace(form.Content) == "" {
-		form.FieldErrors["content"] = "This field cannot be blank"
+	if validator.Blank(title) {
+		form.AddFieldError("title", "This field cannot be blank")
+	} else if validator.MoreThanMaxChars(title, 100) {
+		form.AddFieldError("title", "this field cannot be more than 100 chars long")
 	}
 
-	if form.Expires != 1 && form.Expires != 7 && form.Expires != 365 {
-		form.FieldErrors["content"] = "This field must be equal to 1, 7 or 365"
+	if validator.Blank(content) {
+		form.AddFieldError("content", "This field cannot be blank")
 	}
 
-	return &form
+	if !validator.PermittedValue(expires, []int{1, 7, 365}) {
+		form.AddFieldError("expires", "This field must be equal to 1, 7 or 365")
+	}
+
+	return form
 }

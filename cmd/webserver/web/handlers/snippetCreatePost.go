@@ -34,12 +34,12 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 
 		if len(form.FieldErrors) > 0 {
 			data := app.NewTemplateData(r)
-			data.SnippetCreateFormData = *form
+			data.SnippetCreateFormData = form
 			app.Render(w, r, http.StatusUnprocessableEntity, "create", data)
 			return
 		}
 
-		id, err := app.Insert(*form)
+		id, err := app.Insert(form)
 		if err != nil {
 			app.ServerError(w, r, err)
 			return
