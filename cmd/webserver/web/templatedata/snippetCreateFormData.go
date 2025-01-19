@@ -5,31 +5,30 @@ import (
 )
 
 type SnippetCreateFormData struct {
-	Title   string
-	Content string
-	Expires int
-	validator.Validator
+	Title               string `form:"title"`
+	Content             string `form:"content"`
+	Expires             int    `form:"expires"`
+	validator.Validator `form:"-"`
 }
 
-func NewSnippetCreateFormData(title, content string, expires int) SnippetCreateFormData {
-	form := SnippetCreateFormData{
-		Title:   title,
-		Content: content,
-		Expires: expires,
-	}
-	if validator.Blank(title) {
-		form.AddFieldError("title", "This field cannot be blank")
-	} else if validator.MoreThanMaxChars(title, 100) {
-		form.AddFieldError("title", "this field cannot be more than 100 chars long")
-	}
-
-	if validator.Blank(content) {
-		form.AddFieldError("content", "This field cannot be blank")
-	}
-
-	if !validator.PermittedValue(expires, []int{1, 7, 365}) {
-		form.AddFieldError("expires", "This field must be equal to 1, 7 or 365")
-	}
-
-	return form
+func (form *SnippetCreateFormData) Validate() {
+	form.CheckField(
+		validator.NotBlank(form.Title),
+		"title",
+		"This field cannot be blank")
+	form.CheckField(
+		validator.LessThanMaxChars(form.Title, 100),
+		"title",
+		"this field cannot be more than 100 chars long",
+	)
+	form.CheckField(
+		validator.NotBlank(form.Content),
+		"content",
+		"This field cannot be blank",
+	)
+	form.CheckField(
+		validator.PermittedValue(form.Expires, []int{1, 7, 365}),
+		"expires",
+		"This field must be equal to 1, 7 or 365",
+	)
 }

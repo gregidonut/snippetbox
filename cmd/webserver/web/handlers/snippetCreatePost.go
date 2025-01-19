@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
@@ -20,19 +19,15 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 		}
 		app.Debug(fmt.Sprintf("r.PostForm: %#v", r.PostForm))
 
-		expires, err := strconv.Atoi(r.PostForm.Get("expires"))
-		if err != nil {
+		form := templatedata.SnippetCreateFormData{}
+
+		if err := app.Decode(&form, r.PostForm); err != nil {
 			app.ClientError(w, http.StatusBadRequest)
 			return
 		}
+		form.Validate()
 
-		form := templatedata.NewSnippetCreateFormData(
-			r.PostForm.Get("title"),
-			r.PostForm.Get("content"),
-			expires,
-		)
-
-		if len(form.FieldErrors) > 0 {
+		if !form.Valid() {
 			data := app.NewTemplateData(r)
 			data.SnippetCreateFormData = form
 			app.Render(w, r, http.StatusUnprocessableEntity, "create", data)

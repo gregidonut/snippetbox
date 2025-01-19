@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/go-playground/form/v4"
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
 
@@ -17,6 +18,7 @@ type Application struct {
 	*config.RuntimeCFG
 	*models.SnippetModel
 	TemplateCache map[string]*template.Template
+	*form.Decoder
 }
 
 func NewApplication() (*Application, error) {
@@ -49,6 +51,8 @@ func NewApplication() (*Application, error) {
 		return payload, err
 	}
 	payload.TemplateCache = tc
+
+	payload.Decoder = form.NewDecoder()
 	return payload, nil
 }
 

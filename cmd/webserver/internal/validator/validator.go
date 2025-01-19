@@ -24,12 +24,18 @@ func (v *Validator) AddFieldError(key, message string) {
 	}
 }
 
-func Blank(value string) bool {
-	return strings.TrimSpace(value) == ""
+func (v *Validator) CheckField(ok bool, key, message string) {
+	if !ok {
+		v.AddFieldError(key, message)
+	}
 }
 
-func MoreThanMaxChars(value string, maxN int) bool {
-	return utf8.RuneCountInString(value) > maxN
+func NotBlank(value string) bool {
+	return strings.TrimSpace(value) != ""
+}
+
+func LessThanMaxChars(value string, maxN int) bool {
+	return utf8.RuneCountInString(value) <= maxN
 }
 
 func PermittedValue[T comparable](value T, permittedValues []T) bool {
