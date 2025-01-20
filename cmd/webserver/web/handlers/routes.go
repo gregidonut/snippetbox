@@ -14,10 +14,12 @@ func Routes(app *application.Application) http.Handler {
 	fileServer := http.FileServer(http.Dir(app.StaticDirPath))
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
 
-	mux.HandleFunc("GET /{$}", home(app))
-	mux.HandleFunc("GET /snippet/view/{id}", snippetView(app))
-	mux.HandleFunc("GET /snippet/create", snippetCreate(app))
-	mux.HandleFunc("POST /snippet/create", snippetCreatePost(app))
+	dynamic := alice.New(app.LoadAndSave)
+
+	mux.Handle("GET /{$}", dynamic.ThenFunc(home(app)))
+	mux.Handle("GET /snippet/view/{id}", dynamic.ThenFunc(snippetView(app)))
+	mux.Handle("GET /snippet/create", dynamic.ThenFunc(snippetCreate(app)))
+	mux.Handle("POST /snippet/create", dynamic.ThenFunc(snippetCreatePost(app)))
 
 	standard := alice.New(
 		middleware.RecoverPanic(app),

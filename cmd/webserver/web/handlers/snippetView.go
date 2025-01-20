@@ -20,7 +20,7 @@ func snippetView(app *application.Application) http.HandlerFunc {
 			return
 		}
 		app.Info("snippetView successfully parsed from url", slog.Int("id", id))
-		snippet, err := app.Get(id)
+		snippet, err := app.SnippetModel.Get(id)
 		if err != nil {
 			if errors.Is(errors.Unwrap(err), models.ErrNoRecord) {
 				http.NotFound(w, r)

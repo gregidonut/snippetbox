@@ -5,7 +5,10 @@ import (
 	"html/template"
 	"log/slog"
 	"os"
+	"time"
 
+	"github.com/alexedwards/scs/postgresstore"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
@@ -19,6 +22,7 @@ type Application struct {
 	*models.SnippetModel
 	TemplateCache map[string]*template.Template
 	*form.Decoder
+	*scs.SessionManager
 }
 
 func NewApplication() (*Application, error) {
@@ -53,6 +57,11 @@ func NewApplication() (*Application, error) {
 	payload.TemplateCache = tc
 
 	payload.Decoder = form.NewDecoder()
+
+	payload.SessionManager = scs.New()
+	payload.Store = postgresstore.New(db)
+	payload.Lifetime = 12 * time.Hour
+
 	return payload, nil
 }
 
