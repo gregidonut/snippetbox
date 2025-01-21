@@ -1,4 +1,5 @@
 bin/
 tmp/
+tls/
 defaultConfig.yaml
 push_pg.Dockerfile
