@@ -31,8 +31,11 @@ func snippetView(app *application.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
+		flash := app.SessionManager.PopString(r.Context(), "flash")
+
 		data := app.NewTemplateData(r)
 		data.Snippet = snippet
+		data.Flash = flash
 
 		app.Render(w, r, http.StatusOK, "view", data)
 	}

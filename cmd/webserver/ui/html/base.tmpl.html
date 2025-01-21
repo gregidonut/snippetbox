@@ -17,6 +17,11 @@
                 {{template "nav" .}}
             </header>
             <main class="main">
+                {{with .Flash}}
+                    <section>
+                        {{.}}
+                    </section>
+                {{end}}
                 {{template "main" .}}
             </main>
             <footer class="footer">

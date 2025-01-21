@@ -35,6 +35,8 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 			return
 		}
 
+		app.Put(r.Context(), "flash", "Snippet created successfully!")
+
 		http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
 	}
 }
