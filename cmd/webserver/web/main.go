@@ -35,9 +35,15 @@ func main() {
 		app.RuntimeCFG = rcfg
 	}
 
+	srv := &http.Server{
+		Addr:     app.GetPort(),
+		Handler:  handlers.Routes(app),
+		ErrorLog: slog.NewLogLogger(app.Handler(), slog.LevelError),
+	}
+
 	app.Info("starting server", slog.Int("port", app.Port))
 	app.Error(
-		http.ListenAndServe(app.GetPort(), handlers.Routes(app)).Error(),
+		srv.ListenAndServe().Error(),
 	)
 	os.Exit(1)
 }
