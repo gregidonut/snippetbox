@@ -58,9 +58,12 @@ func NewApplication() (*Application, error) {
 
 	payload.Decoder = form.NewDecoder()
 
+	// {{ scs.SessionManager options
 	payload.SessionManager = scs.New()
 	payload.Store = postgresstore.New(db)
 	payload.Lifetime = 12 * time.Hour
+	payload.Cookie.Secure = true
+	// }}
 
 	return payload, nil
 }

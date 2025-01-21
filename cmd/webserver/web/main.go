@@ -24,6 +24,8 @@ func main() {
 	flag.StringVar(&app.StaticDirPath, "sdp", app.StaticDirPath, "static directory path")
 	flag.StringVar(&app.ConnStr, "cs", app.ConnStr, "postgresql connection string")
 	flag.StringVar(&app.HtmlTemplateDirPath, "htdp", app.HtmlTemplateDirPath, "dir path for the html templates")
+	flag.StringVar(&app.TLSCertPath, "tlscp", app.TLSCertPath, "file path for the self signed tls cert")
+	flag.StringVar(&app.TLSKeyPath, "tlskp", app.TLSKeyPath, "file path for the self signed tls key")
 	flag.Parse()
 
 	if *applicationFilePath != config.DEFAULT_CONFIG_PATH {
@@ -43,7 +45,7 @@ func main() {
 
 	app.Info("starting server", slog.Int("port", app.Port))
 	app.Error(
-		srv.ListenAndServe().Error(),
+		srv.ListenAndServeTLS(app.TLSCertPath, app.TLSKeyPath).Error(),
 	)
 	os.Exit(1)
 }

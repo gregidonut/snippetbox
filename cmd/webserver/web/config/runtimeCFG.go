@@ -18,6 +18,8 @@ type RuntimeCFG struct {
 	StaticDirPath       string `yaml:"StaticDirPath"`
 	ConnStr             string `yaml:"ConnStr"`
 	HtmlTemplateDirPath string `yaml:"HtmlTemplateDirPath"`
+	TLSCertPath         string `yaml:"TLSCertPath"`
+	TLSKeyPath          string `yaml:"TLSKeyPath"`
 }
 
 func (c *RuntimeCFG) GetPort() string {
