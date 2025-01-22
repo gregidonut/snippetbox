@@ -1,10 +1,12 @@
 package main
 
 import (
+	"crypto/tls"
 	"flag"
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/config"
@@ -41,6 +43,12 @@ func main() {
 		Addr:     app.GetPort(),
 		Handler:  handlers.Routes(app),
 		ErrorLog: slog.NewLogLogger(app.Handler(), slog.LevelError),
+		TLSConfig: &tls.Config{
+			CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+		},
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
 
 	app.Info("starting server", slog.Int("port", app.Port))
