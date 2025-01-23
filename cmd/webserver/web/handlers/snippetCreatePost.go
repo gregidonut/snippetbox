@@ -13,7 +13,7 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 		app.Debug("called snippetCreate handler")
 		defer app.Debug("finished snippetCreate handler")
 
-		form := templatedata.SnippetCreateFormData{}
+		form := &templatedata.SnippetCreateFormData{}
 
 		if err := app.DecodePostForm(r, &form); err != nil {
 			app.Error(err.Error())
@@ -23,9 +23,9 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 
 		form.Validate()
 		if !form.Valid() {
-			data := app.NewTemplateData(r)
-			data.SnippetCreateFormData = form
-			app.Render(w, r, http.StatusUnprocessableEntity, "create", data)
+			data := templatedata.NewTemplateData[*templatedata.SnippetCreateFormData](r, app)
+			data.Form = form
+			render(app, w, r, http.StatusUnprocessableEntity, "create", data)
 			return
 		}
 

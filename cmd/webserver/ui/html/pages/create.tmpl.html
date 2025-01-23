@@ -1,4 +1,3 @@
-
 {{define "title"}}Create{{end}}
 {{define "main"}}
 <link rel="stylesheet"  href="/static/css/snippetCreateForm.css">
@@ -7,25 +6,33 @@
         <legend>create</legend>
         <div>
             <label for="title" >Title</label>  
-            <input type="text" name="title" id="title" value="{{.SnippetCreateFormData.Title}}">
+            {{if and .Form .Form.Title}}
+                <input type="text" name="title" id="title" value="{{.Form.Title}}">
+            {{else}}
+                <input type="text" name="title" id="title" value="">
+            {{end}}
         </div>
-        {{with .SnippetCreateFormData.FieldErrors.title}}
-            <label class="error" for="title">{{.}}</label>  
+        {{if and .Form .Form.FieldErrors.title}}
+            <label class="error" for="title">{{.Form.FieldErrors.title}}</label>  
         {{end}}
         <div>
             <label for="content">Content</label>  
-            <textarea name="content" id="content" cols="30" rows="4">{{.SnippetCreateFormData.Content}}</textarea>
+            {{if and .Form .Form.Content}}
+                <textarea name="content" id="content" cols="30" rows="4">{{.Form.Content}}</textarea>
+            {{else}}
+                <textarea name="content" id="content" cols="30" rows="4"></textarea>
+            {{end}}
         </div>
-        {{with .SnippetCreateFormData.FieldErrors.content}}
-            <label class="error" for="content">{{.}}</label>  
+        {{if and .Form .Form.FieldErrors.content}}
+            <label class="error" for="content">{{.Form.FieldErrors.content}}</label>  
         {{end}}
         <div>
             <label for="expires">Delete in</label>  
             <div>
-            {{with .SnippetCreateFormData.Expires}}
-                <input type="radio" name="expires" id="expires" value="365" {{if eq . 365}}checked{{end}}> One Year
-                <input type="radio" name="expires" id="expires" value="7" {{if eq . 7}}checked{{end}}> One Week
-                <input type="radio" name="expires" id="expires" value="1" {{if eq . 1}}checked{{end}}> One Day
+            {{if and .Form .Form.Expires}}
+                <input type="radio" name="expires" id="expires" value="365" {{if eq .Form.Expires 365}}checked{{end}}> One Year
+                <input type="radio" name="expires" id="expires" value="7" {{if eq .Form.Expires 7}}checked{{end}}> One Week
+                <input type="radio" name="expires" id="expires" value="1" {{if eq .Form.Expires 1}}checked{{end}}> One Day
             {{else}}
                 <input type="radio" name="expires" id="expires" value="365"> One Year
                 <input type="radio" name="expires" id="expires" value="7"> One Week
@@ -33,8 +40,8 @@
             {{end}}
             </div>
         </div>
-        {{with .SnippetCreateFormData.FieldErrors.expires}}
-            <label class="error" for="expires">{{.}}</label>  
+        {{if and .Form .Form.FieldErrors.expires}}
+            <label class="error" for="expires">{{.Form.FieldErrors.expires}}</label>  
         {{end}}
         <button type="submit">Publish</button>
     </fieldset>

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
 
 func home(app *application.Application) http.HandlerFunc {
@@ -16,9 +17,9 @@ func home(app *application.Application) http.HandlerFunc {
 			return
 		}
 
-		data := app.NewTemplateData(r)
+		data := templatedata.NewTemplateData[*templatedata.BlankFormData](r, app)
 		data.Snippets = snippets
 
-		app.Render(w, r, http.StatusOK, "home", data)
+		render(app, w, r, http.StatusOK, "home", data)
 	}
 }

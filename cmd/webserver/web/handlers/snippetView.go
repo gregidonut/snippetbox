@@ -8,6 +8,7 @@ import (
 
 	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
+	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
 
 func snippetView(app *application.Application) http.HandlerFunc {
@@ -31,9 +32,9 @@ func snippetView(app *application.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
-		data := app.NewTemplateData(r)
+		data := templatedata.NewTemplateData[*templatedata.BlankFormData](r, app)
 		data.Snippet = snippet
 
-		app.Render(w, r, http.StatusOK, "view", data)
+		render(app, w, r, http.StatusOK, "view", data)
 	}
 }

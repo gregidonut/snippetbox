@@ -1,6 +1,10 @@
 package appinterface
 
-import "net/http"
+import (
+	"context"
+	"html/template"
+	"net/http"
+)
 
 type App interface {
 	Info(msg string, args ...any)
@@ -10,4 +14,6 @@ type App interface {
 		r *http.Request,
 		err error,
 	)
+	PopString(ctx context.Context, key string) string
+	GetTemplateCache() map[string]*template.Template
 }

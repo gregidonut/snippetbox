@@ -11,23 +11,45 @@ type SnippetCreateFormData struct {
 	validator.Validator `form:"-"`
 }
 
-func (form *SnippetCreateFormData) Validate() {
-	form.CheckField(
-		validator.NotBlank(form.Title),
+func NewSnippetCreateFormData() *SnippetCreateFormData {
+	return &SnippetCreateFormData{
+		Expires: 7,
+	}
+}
+
+func (f *SnippetCreateFormData) GetTitle() string {
+	return f.Title
+}
+
+func (f *SnippetCreateFormData) GetContent() string {
+	return f.Content
+}
+
+func (f *SnippetCreateFormData) GetExpires() int {
+	return f.Expires
+}
+
+func (f *SnippetCreateFormData) GetValidator() validator.Validator {
+	return f.Validator
+}
+
+func (f *SnippetCreateFormData) Validate() {
+	f.CheckField(
+		validator.NotBlank(f.GetTitle()),
 		"title",
 		"This field cannot be blank")
-	form.CheckField(
-		validator.LessThanMaxChars(form.Title, 100),
+	f.CheckField(
+		validator.LessThanMaxChars(f.GetTitle(), 100),
 		"title",
 		"this field cannot be more than 100 chars long",
 	)
-	form.CheckField(
-		validator.NotBlank(form.Content),
+	f.CheckField(
+		validator.NotBlank(f.GetContent()),
 		"content",
 		"This field cannot be blank",
 	)
-	form.CheckField(
-		validator.PermittedValue(form.Expires, []int{1, 7, 365}),
+	f.CheckField(
+		validator.PermittedValue(f.GetExpires(), []int{1, 7, 365}),
 		"expires",
 		"This field must be equal to 1, 7 or 365",
 	)
