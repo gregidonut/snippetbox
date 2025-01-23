@@ -29,7 +29,7 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 			return
 		}
 
-		id, err := app.Insert(form)
+		id, err := app.SnippetModel.Insert(form)
 		if err != nil {
 			app.ServerError(w, r, err)
 			return

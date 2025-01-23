@@ -20,12 +20,13 @@ type Application struct {
 	*slog.Logger
 	*config.RuntimeCFG
 	*models.SnippetModel
+	*models.UserModel
 	TemplateCache map[string]*template.Template
 	*form.Decoder
 	*scs.SessionManager
 }
 
-func NewApplication() (*Application, error) {
+func NewApplication() (*Application, func() error, error) {
 	// payload needs to always be returned regardles of error since
 	// entire app depends on the existence of logger
 	payload := &Application{
@@ -37,7 +38,7 @@ func NewApplication() (*Application, error) {
 
 	rcfg, err := config.NewRuntimeCFG(payload, config.DEFAULT_CONFIG_PATH)
 	if err != nil {
-		return payload, err
+		return payload, nil, err
 	}
 	payload.RuntimeCFG = rcfg
 
@@ -45,14 +46,15 @@ func NewApplication() (*Application, error) {
 
 	db, err := payload.openDB()
 	if err != nil {
-		return payload, err
+		return payload, db.Close, err
 	}
 
 	payload.SnippetModel = models.NewSnippetModel(db)
+	payload.UserModel = models.NewUserModel(db)
 
 	tc, err := payload.NewTemplateCache()
 	if err != nil {
-		return payload, err
+		return payload, db.Close, err
 	}
 	payload.TemplateCache = tc
 
@@ -65,7 +67,7 @@ func NewApplication() (*Application, error) {
 	payload.Cookie.Secure = true
 	// }}
 
-	return payload, nil
+	return payload, db.Close, nil
 }
 
 func (app *Application) checkDefaultConfigPathExists() {

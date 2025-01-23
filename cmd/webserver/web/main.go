@@ -14,12 +14,14 @@ import (
 )
 
 func main() {
-	app, err := application.NewApplication()
+	app, dbCloserFunc, err := application.NewApplication()
 	if err != nil {
 		app.Error(err.Error(), slog.String("constructor", "application.NewApplication()"))
 		os.Exit(1)
 	}
-	defer app.Close()
+	if dbCloserFunc != nil {
+		defer dbCloserFunc()
+	}
 
 	applicationFilePath := flag.String("conf", config.DEFAULT_CONFIG_PATH, "specify a application file path")
 	flag.IntVar(&app.Port, "p", app.Port, "HTTP port address")
