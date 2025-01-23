@@ -1,7 +1,7 @@
 {{define "title"}}Create{{end}}
 {{define "main"}}
-<link rel="stylesheet"  href="/static/css/snippetCreateForm.css">
-<form action="/snippet/create" method="POST" class="snippet-create-form">
+<link rel="stylesheet"  href="/static/css/twoColumnForm.css">
+<form action="/snippet/create" method="POST" class="two-column-form">
     <fieldset>
         <legend>create</legend>
         <div>
@@ -43,7 +43,7 @@
         {{if and .Form .Form.FieldErrors.expires}}
             <label class="error" for="expires">{{.Form.FieldErrors.expires}}</label>  
         {{end}}
-        <button type="submit">Publish</button>
     </fieldset>
+    <button type="submit">Publish</button>
 </form>
 {{end}}

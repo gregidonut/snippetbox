@@ -1,0 +1,31 @@
+{{define "title"}}Signup{{end}}
+{{define "main"}}
+<link rel="stylesheet"  href="/static/css/twoColumnForm.css">
+<form action="/snippet/create" method="POST" class="two-column-form" novalidate>
+    <fieldset>
+        <legend>Sign up</legend>
+        <div>
+            <label for="name">Name</label> 
+            <input type="text" name="name" id="name" value="{{if and .Form .Form.Name}}{{.Form.Name}}{{end}}">
+        </div>
+            {{if and .Form .Form.FieldErrors.name}}
+                <label for="name" class="error"></label> 
+            {{end}}
+        <div>
+            <label for="email">Email</label> 
+            <input type="email" name="email" id="email" value="{{if and .Form .Form.Email}}{{.Form.Email}}{{end}}">
+        </div>
+            {{if and .Form .Form.FieldErrors.email}}
+                <label for="email" class="error"></label> 
+            {{end}}
+        <div>
+            <label for="password">Password</label> 
+            <input type="password" name="password" id="password">
+        </div>
+            {{if and .Form .Form.FieldErrors.password}}
+                <label for="password" class="error"></label> 
+            {{end}}
+    </fieldset>
+    <button type="submit">Signup</button>
+</form>
+{{end}}

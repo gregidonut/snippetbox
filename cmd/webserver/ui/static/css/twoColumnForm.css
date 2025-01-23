@@ -1,7 +1,7 @@
-.snippet-create-form {
+.two-column-form {
 }
 
-.snippet-create-form fieldset {
+.two-column-form fieldset {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,7 +11,7 @@
     padding: 2rem;
 }
 
-.snippet-create-form fieldset label.error {
+.two-column-form fieldset label.error {
     font-size: 1.3rem;
     color: #FF5555;
 
@@ -19,7 +19,7 @@
     padding-bottom: .4rem;
 }
 
-.snippet-create-form > fieldset > div {
+.two-column-form > fieldset > div {
     display: grid;
     grid-template-columns: 10rem 1fr;
     align-items: center;
@@ -29,7 +29,7 @@
     gap: 1rem;
 }
 
-.snippet-create-form > fieldset > div > div {
+.two-column-form > fieldset > div > div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -37,6 +37,6 @@
     width: 100%;
 }
 
-.snippet-create-form > fieldset > button {
+.two-column-form >  button {
     padding: .5rem;
 }
