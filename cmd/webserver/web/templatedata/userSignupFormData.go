@@ -1,6 +1,9 @@
 package templatedata
 
-import "github.com/gregidonut/snippetbox/cmd/webserver/internal/validator"
+import (
+	"github.com/gregidonut/snippetbox/cmd/webserver/internal/validator"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type UserSignupFormData struct {
 	Name                string `form:"name"`
@@ -17,8 +20,13 @@ func (f *UserSignupFormData) GetEmail() string {
 	return f.Email
 }
 
-func (f *UserSignupFormData) GetPassword() string {
-	return f.Password
+func (f *UserSignupFormData) GetHashedPassword() (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(f.Password), 12)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
 }
 
 func (f *UserSignupFormData) GetValidator() validator.Validator {
@@ -42,12 +50,12 @@ func (f *UserSignupFormData) Validate() {
 		"This field must be a vaild email address",
 	)
 	f.CheckField(
-		validator.NotBlank(f.GetPassword()),
+		validator.NotBlank(f.Password),
 		"password",
 		"This field cannot be blank",
 	)
 	f.CheckField(
-		validator.MoreThanMinChars(f.GetPassword(), 8),
+		validator.MoreThanMinChars(f.Password, 8),
 		"password",
 		"field must be at least 8 characters long",
 	)

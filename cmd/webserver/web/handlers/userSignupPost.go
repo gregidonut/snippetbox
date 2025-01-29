@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
+	"github.com/gregidonut/snippetbox/cmd/webserver/internal/models"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/application"
 	"github.com/gregidonut/snippetbox/cmd/webserver/web/templatedata"
 )
@@ -28,7 +29,20 @@ func userSignupPost(app *application.Application) http.HandlerFunc {
 			render(app, w, r, http.StatusUnprocessableEntity, "signup", data)
 			return
 		}
+		err := app.UserModel.Insert(form)
+		if err != nil {
+			if errors.Is(err, models.ErrDuplicateEmail) {
+				form.AddFieldError("email", "Email address is already in use")
 
-		fmt.Fprintf(w, "Create new user....")
+				data := templatedata.New[*templatedata.UserSignupFormData](r, app)
+				data.Form = form
+
+				render(app, w, r, http.StatusUnprocessableEntity, "signup", data)
+			}
+		}
+
+		app.Put(r.Context(), "flash", "account successfully created!")
+
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 	}
 }
