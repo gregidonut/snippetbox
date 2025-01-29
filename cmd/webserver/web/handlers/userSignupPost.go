@@ -23,7 +23,7 @@ func userSignupPost(app *application.Application) http.HandlerFunc {
 
 		form.Validate()
 		if !form.Valid() {
-			data := templatedata.NewTemplateData[*templatedata.UserSignupFormData](r, app)
+			data := templatedata.New[*templatedata.UserSignupFormData](r, app)
 			data.Form = form
 			render(app, w, r, http.StatusUnprocessableEntity, "signup", data)
 			return

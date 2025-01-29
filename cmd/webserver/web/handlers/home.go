@@ -17,7 +17,7 @@ func home(app *application.Application) http.HandlerFunc {
 			return
 		}
 
-		data := templatedata.NewTemplateData[*templatedata.BlankFormData](r, app)
+		data := templatedata.New[*templatedata.BlankFormData](r, app)
 		data.Snippets = snippets
 
 		render(app, w, r, http.StatusOK, "home", data)

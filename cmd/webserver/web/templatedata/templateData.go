@@ -24,7 +24,7 @@ type TemplateData[T FormData] struct {
 	Form        T
 }
 
-func NewTemplateData[T FormData](
+func New[T FormData](
 	r *http.Request, app appinterface.App,
 ) TemplateData[T] {
 	return TemplateData[T]{

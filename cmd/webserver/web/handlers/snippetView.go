@@ -32,7 +32,7 @@ func snippetView(app *application.Application) http.HandlerFunc {
 		}
 		app.Debug("parsed tmpl files")
 
-		data := templatedata.NewTemplateData[*templatedata.BlankFormData](r, app)
+		data := templatedata.New[*templatedata.BlankFormData](r, app)
 		data.Snippet = snippet
 
 		render(app, w, r, http.StatusOK, "view", data)

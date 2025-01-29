@@ -23,7 +23,7 @@ func snippetCreatePost(app *application.Application) http.HandlerFunc {
 
 		form.Validate()
 		if !form.Valid() {
-			data := templatedata.NewTemplateData[*templatedata.SnippetCreateFormData](r, app)
+			data := templatedata.New[*templatedata.SnippetCreateFormData](r, app)
 			data.Form = form
 			render(app, w, r, http.StatusUnprocessableEntity, "create", data)
 			return
