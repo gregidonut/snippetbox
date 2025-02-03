@@ -1,0 +1,30 @@
+{{define "title"}}Login{{end}}
+{{define "main"}}
+<link rel="stylesheet"  href="/static/css/twoColumnForm.css">
+<form action="/user/login" method="POST" class="two-column-form" novalidate>
+    <fieldset>
+        <legend>Login</legend>
+        {{if .Form}}
+            {{range .Form.NonFieldErrors}}
+                <p class="error">{{.}}</p>
+            {{end}}
+        {{end}}
+        <div>
+            <label for="email">Email</label> 
+            <input type="email" name="email" id="email" value="{{if and .Form .Form.Email}}{{.Form.Email}}{{end}}">
+        </div>
+            {{if and .Form .Form.FieldErrors.email}}
+        <label for="email" class="error">{{.Form.FieldErrors.email}}</label> 
+            {{end}}
+        <div>
+            <label for="password">Password</label> 
+            <input type="password" name="password" id="password">
+        </div>
+            {{if and .Form .Form.FieldErrors.password}}
+                <label for="password" class="error">{{.Form.FieldErrors.password}}</label> 
+            {{end}}
+    </fieldset>
+    <button type="submit">Login</button>
+</form>
+
+{{end}}

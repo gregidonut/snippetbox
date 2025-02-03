@@ -12,7 +12,8 @@ import (
 type FormData interface {
 	*BlankFormData |
 		*SnippetCreateFormData |
-		*UserSignupFormData
+		*UserSignupFormData |
+		*UserLoginFormData
 	GetValidator() validator.Validator
 }
 
